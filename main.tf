@@ -1,15 +1,4 @@
 locals {
-  // the value assigned to the tf output
-  // can this be simplified, i.e. no specific requires_id or
-  // output = azurerm_policy_set_definition.policy
-  # output = {
-  #   requires_identity = {
-  #       for policy in local.set_definition_ids : 
-  #         policy.name => policy.id
-  #   }
-  #   no_required_identity = {}
-  # }
-
   templated_policy_initiatives = var.policy_initiatives
 
   set_definition_ids = azurerm_policy_set_definition.policy
