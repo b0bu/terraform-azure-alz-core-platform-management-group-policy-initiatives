@@ -3,8 +3,12 @@ variable "management_group_id" {
   description = "scope at which to apply the policy"
 }
 
-variable "policy_initiatives" {
-  type        = map
-  description = "hcl templated policy initiatives output from policy-factory"
-  default = {}
+variable "name" {
+  type        = string
+  description = "scope at which to apply the policy"
+}
+
+variable "properties" {
+  type        = any
+  description = "scope at which to apply the policy"
 }

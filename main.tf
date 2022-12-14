@@ -1,31 +1,18 @@
-locals {
-  templated_policy_initiatives = var.policy_initiatives
-
-  set_definition_ids = azurerm_policy_set_definition.policy
-
-  common_template_values = {
-    scope    = var.management_group_id
-    location = "uksouth"
-  }
-}
-
 resource "azurerm_policy_set_definition" "policy" {
-  for_each = local.templated_policy_initiatives
-
-  name         = each.value.name
+  name         = var.name
   policy_type  = "Custom"
-  display_name = each.value.properties.displayName
+  display_name = var.properties.displayName
 
-  parameters          = try(length(each.value.properties.parameters) > 0, false) ? jsonencode(each.value.properties.parameters) : null
-  description         = try(each.value.properties.description, "${each.value.properties.displayName} Policy Set Definition at scope ${each.value.scope_id}")
-  management_group_id = try(each.value.scope_id, local.common_template_values.scope)
-  metadata            = try(length(each.value.properties.metadata) > 0, false) ? jsonencode(each.value.properties.metadata) : null
+  parameters          = try(length(var.properties.parameters) > 0, false) ? jsonencode(var.properties.parameters) : null
+  description         = try(var.properties.description, "${var.properties.displayName} Policy Set Definition at scope ${var.management_group_id}")
+  management_group_id = var.management_group_id
+  metadata            = try(length(var.properties.metadata) > 0, false) ? jsonencode(var.properties.metadata) : null
 
 
   dynamic "policy_definition_reference" {
     for_each = [ 
       // build dynamic list of map
-      for item in each.value.properties.policyDefinitions :
+      for item in var.properties.policyDefinitions :
       {
         policyDefinitionId          = item.policyDefinitionId
         # Optional resource attributes
