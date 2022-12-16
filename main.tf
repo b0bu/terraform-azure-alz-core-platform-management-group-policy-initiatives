@@ -10,17 +10,17 @@ resource "azurerm_policy_set_definition" "policy" {
 
 
   dynamic "policy_definition_reference" {
-    for_each = [ 
+    for_each = [
       // build dynamic list of map
       for item in var.properties.policyDefinitions :
       {
-        policyDefinitionId          = item.policyDefinitionId
+        policyDefinitionId = item.policyDefinitionId
         # Optional resource attributes
         parameters                  = try(jsonencode(item.parameters), null)
         policyDefinitionReferenceId = try(item.policyDefinitionReferenceId, null)
       }
     ]
-    content { 
+    content {
       // actual hcl properties for policy_definition_reference resource
       policy_definition_id = policy_definition_reference.value["policyDefinitionId"]
       parameter_values     = policy_definition_reference.value["parameters"]
